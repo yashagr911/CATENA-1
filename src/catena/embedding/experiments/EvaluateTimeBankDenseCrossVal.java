@@ -238,7 +238,9 @@ public class EvaluateTimeBankDenseCrossVal {
 	public static void runExperiment(String exp, String pair, String feature,
 			int numFold, boolean binary,
 			List<List<PairFeatureVector>> fvListList) throws Exception {
-		
+		double f1 = 0;
+		double pr = 0;
+		double re = 0;
 		System.out.println();
 		System.out.println("******* EXPERIMENT " + feature + " *******");
 		
@@ -300,6 +302,9 @@ public class EvaluateTimeBankDenseCrossVal {
 			System.out.println("********** FOLD " + (fold+1) + " **********");
 			PairEvaluator peeC = new PairEvaluator(eeTestList);
 			peeC.evaluatePerLabel(labelDense);
+			f1 += peeC.Myf1;
+			pr += peeC.Mypr;
+			re += peeC.Myre;
 			System.out.println();
 		}
 		

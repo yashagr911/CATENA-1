@@ -9,6 +9,8 @@ import catena.parser.entities.Entity;
 import catena.parser.entities.Timex;
 
 public class PairEvaluator {
+
+	public static double Mypr = 0,Myre = 0,Myf1 = 0;
 	
 	private List<String> pairs;
 	
@@ -207,8 +209,9 @@ public class PairEvaluator {
 //				" " + fpr);
 	}
 	
-	private void printEvaluation(String[] label,
+	public void printEvaluation(String[] label,
 			int[] tp, int[] fp, int[] total) {
+		System.out.println("here");
 		double[] precision = new double[label.length]; Arrays.fill(precision, 0);
 		double[] recall = new double[label.length]; Arrays.fill(recall, 0);
 		double[] f1 = new double[label.length]; Arrays.fill(f1, 0);
@@ -220,7 +223,7 @@ public class PairEvaluator {
 		double totalwp = 0;
 		double totalwr = 0;
 		double totalwf1 = 0;
-		
+
 		for (int i=0; i<label.length; i++) {
 			if ((tp[i]+fp[i]) > 0) {
 				precision[i] = tp[i]/(double)(tp[i]+fp[i]);
@@ -256,13 +259,20 @@ public class PairEvaluator {
 					recall[i] + "\t" +
 					f1[i]);
 		}
-		System.out.println("Avg " + totalp/label.length + 
+		Mypr += totalp/label.length;
+		Myre += totalr/label.length;
+		Myf1 += totalf1/label.length;
+//		System.out.println("Total Precision " + totalp/label.length +
+//				" Total recall " + totalr/label.length +
+//				" F1 " + totalf1/label.length);
+		System.out.println("Avg " + totalp/label.length +
 				" " + totalr/label.length +
 				" " + totalf1/label.length);
 		System.out.println("W-Avg " + totalwp/(double)totaltotal + 
 				" " + totalwr/(double)totaltotal +
 				" " + totalwf1/(double)totaltotal);
-		System.out.println("Accuracy " + totaltp/(double)totaltotal + " (" + totaltp + "/" + totaltotal + ")");
+//		System.out.println("Total accuracy " + totaltp/(double)(totaltp+totalfp) + " (" + totaltp + "/" + totaltotal + ")");
+		System.out.println("Total recall " + totaltp/(double)totaltotal + " (" + totaltp + "/" + totaltotal + ")");
 	}
 	
 	private void printEvaluation(String[] label,
@@ -314,6 +324,9 @@ public class PairEvaluator {
 					recall[i] + "\t" +
 					f1[i]);
 		}
+		System.out.println("Total Precision " + totalp/label.length +
+				"Total Recall " + totalr/label.length +
+				"F1 " + totalf1/label.length);
 		System.out.println("Average " + totalp/label.length + 
 				" " + totalr/label.length +
 				" " + totalf1/label.length);
@@ -379,5 +392,5 @@ public class PairEvaluator {
 	public void setPairs(List<String> pairs) {
 		this.pairs = pairs;
 	}
-	
+
 }

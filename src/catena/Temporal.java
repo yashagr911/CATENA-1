@@ -56,7 +56,7 @@ public class Temporal {
 	public Temporal() {
 		
 	}
-	
+
 	public Doc filePreprocessing(File file, TimeMLToColumns tmlToCol, ColumnParser colParser,
 			boolean columnFormat) throws Exception {
 		return filePreprocessing(file, tmlToCol, colParser,
@@ -70,7 +70,6 @@ public class Temporal {
 		Doc doc;
 		if (columnFormat) {
 			doc = colParser.parseDocument(new File(file.getPath()), false);
-			
 		} else {
 			System.err.println("Convert TimeML files to column format...");
 			
@@ -84,8 +83,12 @@ public class Temporal {
 		
 		doc.setFilename(file.getName());
 		if (columnFormat) {
+			System.out.println(file.getAbsolutePath().replace("COL", "TML").replace(".\\","")
+					.replace(".col", ".tml"));
 			if (tlinks != null) TimeMLParser.setTlinks(tlinks, doc);
-			else TimeMLParser.parseTimeML(new File(file.getPath().replace("COL", "TML").replace(".col", ".tml")), doc);
+
+			else TimeMLParser.parseTimeML(new File(file.getAbsolutePath().replace("COL", "TML").replace(".\\","")
+					.replace(".col", ".tml")), doc);
 		} else {
 			if (tlinks != null) TimeMLParser.parseTimeML(file, doc, tlinks, null);
 			else TimeMLParser.parseTimeML(file, doc);
@@ -124,7 +127,7 @@ public class Temporal {
 		
 		File[] files = new File(dirPath).listFiles();
 		for (File file : files) {	//assuming that there is no sub-directory
-			
+//			System.out.println(columnFormat);
 			if ((columnFormat && file.getName().contains(".col"))
 					|| (!columnFormat && file.getName().contains(".tml"))) {
 //				System.err.println("Processing " + file.getPath());
@@ -132,6 +135,9 @@ public class Temporal {
 				// File pre-processing...
 				Map<String, String> tlinks = null;
 				if (tlinkPerFile != null) tlinks = tlinkPerFile.get(file.getName());
+				System.out.println(tlinkPerFile.keySet());
+				System.out.println(file.getName());
+				System.out.println(tlinks);
 				Doc	doc = filePreprocessing(file, tmlToCol, colParser, tlinks, columnFormat);
 				
 				Map<String, String> ttlinks = null, etlinks = null;		

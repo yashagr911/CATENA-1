@@ -10,8 +10,10 @@ import catena.parser.entities.CLINK;
 import catena.parser.entities.ExtractedLinks;
 import catena.parser.entities.TLINK;
 import catena.parser.entities.TemporalRelation;
-
+import catena.evaluator.PairEvaluator;
+//import jdk.internal.util.xml.impl.Pair;
 import org.apache.commons.cli.*;
+import org.apache.commons.cli.Options;
 
 public class Catena {
 	
@@ -90,6 +92,7 @@ public class Catena {
 					tlinkFilepath, clinkFilepath,
 					edModel, etModel, eeModel, eecModel, columnFormat, goldCandidate, clinkType));
 		}
+		//PairEvaluator.printEvaluation(label, tp, fp, total);
 	}
 	
 	public Options getCatenaOptions() {
@@ -630,7 +633,7 @@ public class Catena {
 			String eventEventModel, String causalModel, boolean columnFormat) throws Exception {
 		
 		System.err.println("Train CATENA temporal and causal models...");
-		
+
 		// ---------- TEMPORAL ---------- //
 //		String[] te3CLabelCollapsed = {"BEFORE", "AFTER", "IDENTITY", "SIMULTANEOUS", 
 //				"INCLUDES", "IS_INCLUDED", "BEGINS", "BEGUN_BY", "ENDS", "ENDED_BY"};
@@ -643,17 +646,21 @@ public class Catena {
 				true, false);
 		
 		Map<String, Map<String, String>> tlinkPerFile = null;
+		//System.out.println(tlinkFilepath);
 		if (!tlinkFilepath.equals("")) {
 			tlinkPerFile = Temporal.getLinksFromFile(tlinkFilepath);
+			System.out.println(tlinkPerFile);
 		}
 		
 		// TRAIN
+
 		Map<String, String> relTypeMappingTrain = new HashMap<String, String>();
+
 		relTypeMappingTrain.put("DURING", "SIMULTANEOUS");
 		relTypeMappingTrain.put("DURING_INV", "SIMULTANEOUS");
 		relTypeMappingTrain.put("IBEFORE", "BEFORE");
 		relTypeMappingTrain.put("IAFTER", "AFTER");
-		
+
 		if (temporalFileNames != null) {
 //			if (Arrays.asList(tempLabels).contains("VAGUE")) {
 //				temp.trainModels("catena", temporalTrainCorpus, temporalFileNames, tlinkPerFile, tempLabels, new HashMap<String, String>(), columnFormat);
@@ -663,7 +670,7 @@ public class Catena {
 		} else {
 			temp.trainModels("catena", temporalTrainCorpus, tlinkPerFile, tempLabels, relTypeMappingTrain, columnFormat);
 		}
-		
+
 		// ---------- CAUSAL ---------- //
 //		String[] causalLabel = {"CLINK", "CLINK-R", "NONE"};
 		
@@ -675,8 +682,9 @@ public class Catena {
 		if (!clinkFilepath.equals("")) {
 			clinkPerFile = Causal.getLinksFromFile(clinkFilepath);
 		}
-		
+
 		// TRAIN
+
 		Map<String, Map<String, String>> tlinksForClinkTrainPerFile = new HashMap<String, Map<String, String>>();
 		if (this.isTlinkFeature()) {
 			Map<String, String> relTypeMapping = new HashMap<String, String>();
@@ -700,12 +708,14 @@ public class Catena {
 				if (!tlinksForClinkTrainPerFile.containsKey(cols[0])) tlinksForClinkTrainPerFile.put(cols[0], new HashMap<String, String>());
 				tlinksForClinkTrainPerFile.get(cols[0]).put(cols[1]+","+cols[2], cols[3]);
 				tlinksForClinkTrainPerFile.get(cols[0]).put(cols[2]+","+cols[1], TemporalRelation.getInverseRelation(cols[3]));
+
 			}
-			
+			System.out.println("done3");
 			causal.trainModels("catena", causalTrainCorpus, clinkPerFile, causLabels, 
 					this.isTlinkFeature(), tlinksForClinkTrainPerFile, tempLabels, columnFormat);
 		} else {
 			causal.trainModels("catena", causalTrainCorpus, causLabels, columnFormat);
+			System.out.println("done2");
 		}
 		
 	}
@@ -713,11 +723,13 @@ public class Catena {
 	public Catena (boolean tlinkFeature, boolean clinkPostEditing) {
 		setTlinkFeature(tlinkFeature);
 		setClinkPostEditing(clinkPostEditing);
+		System.out.println("done1");
 	}
 
 	public boolean isTlinkFeature() {
 		return tlinkFeature;
 	}
+
 
 	public void setTlinkFeature(boolean tlinkFeature) {
 		this.tlinkFeature = tlinkFeature;

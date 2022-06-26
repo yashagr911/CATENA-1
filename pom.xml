@@ -1,5 +1,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	
+	<dependency>
+	  <groupId>com.github.paramitamirza</groupId>
+	  <artifactId>CATENA</artifactId>
+	  <version>1.0.3</version>
+	</dependency>
+
+	<plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-compiler-plugin</artifactId>
+		<configuration>
+			<compilerArgument>-XDignore.symbol.file</compilerArgument>
+		</configuration>
+	</plugin>
+
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.paramitamirza</groupId>
 	<artifactId>CATENA</artifactId>

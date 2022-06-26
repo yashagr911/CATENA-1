@@ -222,7 +222,7 @@ public class EventTimexTemporalClassifier extends PairClassifier {
 		System.err.println("Train model...");
 
 		int nInstances = vectors.size();
-		int nFeatures = vectors.get(0).getVectors().size()-1;
+		int nFeatures = (int)vectors.get(0).getVectors().size()-1;
 		
 		System.err.println("Number of instances: " + nInstances);
 		System.err.println("Number of features: " + vectors.get(0).getVectors().size());
@@ -401,7 +401,7 @@ public class EventTimexTemporalClassifier extends PairClassifier {
 				File modelFile = new File(modelPath);
 				Model model = Model.load(modelFile);
 				for (Feature[] instance : instances) {
-					predictionLabels.add(relTypes[(int)Linear.predict(model, instance)-1]);
+					predictionLabels.add(relTypes[Math.abs((int)Linear.predict(model, instance)-1)]);
 				}
 			}
 		}

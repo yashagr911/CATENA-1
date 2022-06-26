@@ -46,13 +46,15 @@ public class TimeMLDoc {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		dbFactory.setIgnoringElementContentWhitespace(true);
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-		doc = dBuilder.parse(tmlFile);
-				
-		//optional, but recommended
-		//read this - http://stackoverflow.com/questions/13786607/normalization-in-dom-parsing-with-java-how-does-it-work
-		doc.getDocumentElement().normalize();
-		
-		root = doc.getDocumentElement();
+//		if (tmlFile. exists()) {
+			doc = dBuilder.parse(tmlFile);
+			//optional, but recommended
+			//read this - http://stackoverflow.com/questions/13786607/normalization-in-dom-parsing-with-java-how-does-it-work
+			doc.getDocumentElement().normalize();
+
+			root = doc.getDocumentElement();
+
+//		}
 	}
 	
 	public void trimWhitespace(Node node)

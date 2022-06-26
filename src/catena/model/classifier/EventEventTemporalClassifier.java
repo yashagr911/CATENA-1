@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 import catena.model.feature.PairFeatureVector;
 import catena.model.feature.FeatureEnum.FeatureName;
 import catena.model.feature.FeatureEnum.PairType;
@@ -367,7 +368,7 @@ public class EventEventTemporalClassifier extends PairClassifier {
 				File modelFile = new File(modelPath);
 				Model model = Model.load(modelFile);
 				for (Feature[] instance : instances) {
-					predictionLabels.add(relTypes[(int)Linear.predict(model, instance)-1]);
+					predictionLabels.add(relTypes[(Math.abs((int)Linear.predict(model, instance)-1))]);
 				}
 			}
 		}
